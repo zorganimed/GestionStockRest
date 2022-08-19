@@ -1,5 +1,6 @@
 package com.sid.ams.entities;
 
+import java.io.Serializable;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -11,9 +12,15 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotBlank;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 
 @Entity
-public class Provider {
+public class Provider implements Serializable{
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -27,6 +34,7 @@ public class Provider {
 	private String email;
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "provider")
+	//@JsonIgnoreProperties("provider")
 	private List<Article> articles;
 
 	public Provider() {
@@ -73,6 +81,7 @@ public class Provider {
 		this.email = email;
 	}
 
+	@JsonManagedReference
 	public List<Article> getArticles() {
 		return articles;
 	}

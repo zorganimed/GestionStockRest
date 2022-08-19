@@ -1,5 +1,7 @@
 package com.sid.ams.entities;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -13,9 +15,17 @@ import javax.validation.constraints.NotBlank;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 
 @Entity
-public class Article {
+public class Article implements Serializable {
 
 
 	@Id
@@ -36,6 +46,7 @@ public class Article {
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "provider_id", nullable = false)
 	@OnDelete(action = OnDeleteAction.CASCADE)
+	@JsonIgnoreProperties("articles")
 	private Provider provider;
 
 	public Article() {
@@ -92,11 +103,12 @@ public class Article {
 	public void setPrice(float price) {
 		this.price = price;
 	}
-
+	@JsonBackReference
 	public Provider getProvider() {
 		return provider;
 	}
 
+	//@JsonSetter
 	public void setProvider(Provider provider) {
 		this.provider = provider;
 	}
